@@ -1,61 +1,58 @@
 from django.db import models
-from django.core.validators import MinValueValidator, EmailValidator
+
+class Category(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.name
+
+
+class BedType(models.Model):
+    name = models.CharField(max_length=50, unique=True)  # e.g. "Single Bed"
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.name
+
 
 class Room(models.Model):
-    """Model for hotel rooms"""
-    ROOM_TYPES = [
-        ('single', 'Single'),
-        ('double', 'Double'),
-        ('suite', 'Suite'),
-        ('deluxe', 'Deluxe'),
-    ]
-
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="rooms")
+    bed_type = models.ForeignKey(BedType, on_delete=models.SET_NULL, null=True, blank=True, related_name="rooms")
+    max_adults = models.PositiveIntegerField(default=1)
+    max_children = models.PositiveIntegerField(default=0)
     name = models.CharField(max_length=100)
-    type = models.CharField(max_length=10, choices=ROOM_TYPES)
-    price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
-    capacity = models.IntegerField(help_text="Maximum number of guests")
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
-    image = models.ImageField(upload_to='rooms/')
     is_available = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.name} - {self.type}"
+        return f"{self.name} - {self.category.name} - {self.bed_type.name if self.bed_type else 'No bed type'}"
+
 
 class Booking(models.Model):
-    """Model for room bookings"""
-    STATUS_CHOICES = [
-        ('pending', 'Pending'),
-        ('confirmed', 'Confirmed'),
-        ('cancelled', 'Cancelled'),
-    ]
-
-    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='bookings')
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    email = models.EmailField(validators=[EmailValidator()])
+    room = models.ForeignKey('Room', on_delete=models.CASCADE, related_name='bookings')
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    email = models.EmailField(blank=True, null=True)  # optional
     phone = models.CharField(max_length=20)
     check_in = models.DateField()
     check_out = models.DateField()
-    adults = models.IntegerField(validators=[MinValueValidator(1)])
-    children = models.IntegerField(default=0, validators=[MinValueValidator(0)])
-    special_requests = models.TextField(blank=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    adults = models.PositiveIntegerField()
+    children = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Booking by {self.first_name} {self.last_name} for {self.room.name}"
+        return f"Booking for {self.room.name} ({self.check_in} to {self.check_out}) by {self.first_name} {self.last_name}"
 
 class Contact(models.Model):
-    """Model for contact form messages"""
-    name = models.CharField(max_length=100)
-    email = models.EmailField(validators=[EmailValidator()])
-    subject = models.CharField(max_length=200)
-    message = models.TextField()
-    is_read = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
+    country = models.CharField(max_length=100)
+    district = models.CharField(max_length=100)
+    tole = models.CharField(max_length=100)
+    phone = models.CharField(max_length=20)
+    email = models.EmailField()
 
     def __str__(self):
-        return f"{self.subject} from {self.name}"
+        return f"{self.tole}, {self.district}, {self.country} - {self.phone}"

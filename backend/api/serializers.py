@@ -1,19 +1,57 @@
 from rest_framework import serializers
-from .models import Room, Booking, Contact
+from .models import Category, BedType, Room, Booking, Contact
 
+# Category Serializer
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['id', 'name', 'description']
+
+# BedType Serializer
+class BedTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BedType
+        fields = ['id', 'name', 'description']
+
+# Room Serializer with nested category and bed type
 class RoomSerializer(serializers.ModelSerializer):
+    category = CategorySerializer(read_only=True)
+    bed_type = BedTypeSerializer(read_only=True)
+
     class Meta:
         model = Room
-        fields = '__all__'
+        fields = [
+            'id',
+            'name',
+            'category',
+            'bed_type',
+            'price',
+            'description',
+            'max_adults',
+            'max_children',
+            'is_available',
+        ]
 
+# Booking Serializer
 class BookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Booking
-        fields = '__all__'
-        read_only_fields = ('status', 'created_at', 'updated_at')
+        fields = [
+            'id',
+            'room',
+            'first_name',
+            'last_name',
+            'email',
+            'phone',
+            'check_in',
+            'check_out',
+            'adults',
+            'children',
+            'created_at',
+        ]
+        read_only_fields = ['id', 'created_at']
 
 class ContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contact
         fields = '__all__'
-        read_only_fields = ('is_read', 'created_at')
