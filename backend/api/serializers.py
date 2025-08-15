@@ -17,6 +17,8 @@ class BedTypeSerializer(serializers.ModelSerializer):
 class RoomSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
     bed_type = BedTypeSerializer(read_only=True)
+    image = serializers.ImageField(required=False)
+    total_price = serializers.SerializerMethodField()
 
     class Meta:
         model = Room
@@ -28,9 +30,13 @@ class RoomSerializer(serializers.ModelSerializer):
             'price',
             'description',
             'max_adults',
-            'max_children',
+            'total_price',
             'is_available',
+            'image'
         ]
+    def get_total_price(self, obj):
+        # obj.total_price is added dynamically in the view
+        return getattr(obj, 'total_price', obj.price)
 
 # Booking Serializer
 class BookingSerializer(serializers.ModelSerializer):
@@ -46,7 +52,7 @@ class BookingSerializer(serializers.ModelSerializer):
             'check_in',
             'check_out',
             'adults',
-            'children',
+            
             'created_at',
         ]
         read_only_fields = ['id', 'created_at']

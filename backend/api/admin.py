@@ -13,13 +13,13 @@ class BedTypeAdmin(admin.ModelAdmin):
 
 @admin.register(Room)
 class RoomAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'category', 'bed_type', 'price', 'max_adults', 'max_children', 'is_available']
+    list_display = ['id', 'name', 'category', 'bed_type', 'price', 'max_adults',  'is_available']
     list_filter = ['category', 'bed_type', 'is_available']
     search_fields = ['name', 'description']
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ['id', 'room', 'first_name', 'last_name', 'check_in', 'check_out', 'adults', 'children', 'created_at']
+    list_display = ['id', 'room', 'first_name', 'last_name', 'check_in', 'check_out', 'adults',  'created_at']
     list_filter = ['check_in', 'check_out', 'room']
     search_fields = ['first_name', 'last_name', 'email', 'phone']
     readonly_fields = ['created_at']
