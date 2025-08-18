@@ -22,7 +22,7 @@ const Hero = () => {
 
   return (
     <div
-      className="relative h-screen flex items-center justify-center bg-cover bg-center"
+      className="relative h-screen flex items-end justify-center bg-cover bg-center pb-14"
       style={{ backgroundImage: "url('/images/hero-bg.jpg')" }}
     >
       <form

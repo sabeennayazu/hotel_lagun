@@ -23,11 +23,11 @@ const Navbar = () => {
                         <Link href="#about" className="text-gray-400 hover:text-white transition-colors duration-200">
                             About
                         </Link>
-                        <Link href="#rooms" className="text-gray-400 hover:text-white transition-colors duration-200">
+                        <Link href="/rooms" className="text-gray-400 hover:text-white transition-colors duration-200">
                             Rooms
                         </Link>
-                        <Link href="#facilities" className="text-gray-400 hover:text-white transition-colors duration-200">
-                            Facilities
+                        <Link href="/gallery" className="text-gray-400 hover:text-white transition-colors duration-200">
+                            Gallery
                         </Link>
                         <Link href="#contact" className="text-gray-700 hover:text-blue-600">
                             Contact
