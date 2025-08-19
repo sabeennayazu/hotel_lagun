@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import Cookies from "js-cookie";
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Protect /rooms route
   if (pathname.startsWith("/rooms")) {
-    const bookingInfo = request.cookies.get("bookingInfo");
+    const bookingInfo = Cookies.get("bookingInfo");
 
     if (!bookingInfo) {
       // ❌ No cookie → redirect to homepage

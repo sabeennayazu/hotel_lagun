@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 const Hero = () => {
   const router = useRouter();
@@ -15,6 +16,7 @@ const Hero = () => {
       alert("Please select check-in and check-out dates");
       return;
     }
+
     router.push(
       `/rooms?check_in=${checkIn}&check_out=${checkOut}&adults=${adults}`
     );

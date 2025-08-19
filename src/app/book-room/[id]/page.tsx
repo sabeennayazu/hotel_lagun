@@ -28,6 +28,7 @@ const BookRoomPage = () => {
   useEffect(() => {
     const bookingInfo = Cookies.get('bookingInfo');
     const selectedRoom = Cookies.get('selectedRoom');
+    console.log("Cookies:", bookingInfo, selectedRoom);
 
     if (!bookingInfo || !selectedRoom) {
       setUnauthorized(true);

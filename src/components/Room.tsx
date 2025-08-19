@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 export interface RoomType {
   id: number;
@@ -24,6 +25,12 @@ interface RoomProps {
 const Room = ({ room, checkIn, checkOut, adults }: RoomProps) => {
   const router = useRouter();
 
+
+  // Save booking info in cookie
+  Cookies.set('bookingInfo', JSON.stringify({ checkIn, checkOut, adults, room }));
+  Cookies.set('selectedRoom', JSON.stringify({ room }));
+  console.log("Cookie has been set bis");
+
   const handleClick = () => {
     router.push(
       `/book-room/${room.id}?check_in=${checkIn}&check_out=${checkOut}&adults=${adults}`
@@ -34,7 +41,7 @@ const Room = ({ room, checkIn, checkOut, adults }: RoomProps) => {
     <div
       onClick={handleClick}
       className="border rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-200 cursor-pointer"
-      
+
     >
       {room.image && (
         <img

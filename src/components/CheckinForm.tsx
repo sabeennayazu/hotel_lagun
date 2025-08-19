@@ -20,6 +20,7 @@ export default function CheckinForm() {
 
     // Save booking info in cookie
     Cookies.set('bookingInfo', JSON.stringify(formData));
+    console.log("Cookies set:", formData);
 
     // Redirect to rooms page
     const params = new URLSearchParams({
